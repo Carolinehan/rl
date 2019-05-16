@@ -109,8 +109,8 @@ class Model(object):
         self.grads = grads
         self.var = var
         self._train_op = self.trainer.apply_gradients(grads_and_var)
-        self.loss_names = ['policy_loss', 'value_loss', 'policy_entropy', 'approxkl', 'clipfrac']
-        self.stats_list = [pg_loss, vf_loss, entropy, approxkl, clipfrac]
+        self.loss_names = ['policy_loss', 'value_loss', 'policy_entropy', 'approxkl', 'clipfrac','loss']
+        self.stats_list = [pg_loss, vf_loss, entropy, approxkl, clipfrac, loss]
 
 
         self.train_model = train_model

@@ -113,6 +113,9 @@ def build_env(args):
         env = make_vec_env(env_id, env_type, args.num_env or 1, seed, reward_scale=args.reward_scale, flatten_dict_observations=flatten_dict_observations)
 
         if env_type == 'mujoco':
+            config = tf.ConfigProto(allow_soft_placement=True,intra_op_parallelism_threads=1,inter_op_parallelism_threads=1)
+            config.gpu_options.allow_growth = True
+            get_session(config=config)
             env = VecNormalize(env)
 
     return env
@@ -202,9 +205,9 @@ def main(args):
 
     if MPI is None or MPI.COMM_WORLD.Get_rank() == 0:
         rank = 0
-        logger.configure()
+        logger.configure(dir='./log',format_strs=['stdout','log','csv','tensorboard'])
     else:
-        logger.configure(format_strs=[])
+        logger.configure(dir='./log',format_strs=['stdout','log','csv','tensorboard'])
         rank = MPI.COMM_WORLD.Get_rank()
 
     model, env = train(args, extra_args)
